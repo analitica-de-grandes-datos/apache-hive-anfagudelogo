@@ -1,6 +1,5 @@
 /* 
-Pregunta
-===========================================================================
+
 
 Escriba una consulta que retorne los valores únicos de la columna `t0.c5` 
 (ordenados). 
@@ -8,8 +7,8 @@ Escriba una consulta que retorne los valores únicos de la columna `t0.c5`
 Apache Hive se ejecutará en modo local (sin HDFS).
 
 Escriba el resultado a la carpeta `output` de directorio de trabajo.
-*/
 
+*/
 
 DROP TABLE IF EXISTS tbl0;
 CREATE TABLE tbl0 (
@@ -41,6 +40,10 @@ MAP KEYS TERMINATED BY '#'
 LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 
-/*
-    >>> Escriba su respuesta a partir de este punto <<<
-*/
+
+INSERT OVERWRITE local directory 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT DISTINCT t1.letra 
+FROM(SELECT explode(c5) as letra
+     FROM tbl0 ) t1
+ORDER BY t1.letra ASC LIMIT 5;

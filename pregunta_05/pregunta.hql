@@ -41,7 +41,11 @@ MAP KEYS TERMINATED BY '#'
 LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 
-/*
-    >>> Escriba su respuesta a partir de este punto <<<
-*/
-
+INSERT OVERWRITE local directory 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT t1.letra,t1.ano,COUNT(*) 
+FROM(SELECT 
+     explode(c5) as letra,
+     date_format(c4,'yyyy') as ano
+     FROM tbl0 ) t1
+group by t1.letra,t1.ano;
