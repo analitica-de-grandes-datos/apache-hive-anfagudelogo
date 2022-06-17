@@ -47,6 +47,6 @@ ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 SELECT t1.a 
 FROM(
     SELECT
-        c1, collect_list(lower(exploded)) as a
+        c1, concat_ws(':',collect_list(UPPER(exploded))) as a
     FROM tbl0 LATERAL VIEW explode(c5) exploded_table AS exploded
     GROUP BY c1) t1;

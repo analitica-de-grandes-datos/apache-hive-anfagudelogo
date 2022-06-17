@@ -43,7 +43,10 @@ MAP KEYS TERMINATED BY '#'
 LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 
-/*
-    >>> Escriba su respuesta a partir de este punto <<<
-*/
-
+INSERT OVERWRITE local directory 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT
+    c2,
+    sum(monto)
+FROM tbl0 LATERAL VIEW explode(map_values(c6)) exploded_table AS monto
+GROUP BY c2;
