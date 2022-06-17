@@ -29,15 +29,11 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 INSERT OVERWRITE local directory 'output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 SELECT
-    t3.c1,
-    t3.c2,
-    t3.c4[t3.c2]
+    t1.monto,
+    count(*)
 FROM(
     SELECT
-        t1.c1,
-        t1.c2,
-        t2.c4
-    FROM tbl0 t1
-    LEFT JOIN tbl1 t2 ON (t1.c1 = t2.c1)) T3;
-
+        monto
+    FROM t0 LATERAL VIEW explode(map_keys(c3)) exploded_table AS monto) t1
+GROUP BY t1.monto;
 
