@@ -26,7 +26,14 @@ CREATE TABLE t0 (
         LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 
-/*
-    >>> Escriba su respuesta a partir de este punto <<<
-*/
+INSERT OVERWRITE local directory 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT
+    t1.monto,
+    count(*)
+FROM(
+    SELECT
+        monto
+    FROM t0 LATERAL VIEW explode(map_keys(c3)) exploded_table AS monto) t1
+GROUP BY t1.monto;
 
